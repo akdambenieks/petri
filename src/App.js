@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import ActionBar from './components/ActionBar';
+import ActionBar from './components/actionBar';
 import './App.css';
 
 class App extends Component {
@@ -27,7 +27,11 @@ class App extends Component {
                                       {q:1, r: 0, s: -1},
                                       {q: 0, r: 1, s: -1},
                                       {q: -1, r: 1, s: 0}
-                                      ]
+                                    ],
+                    gameState: 'start',
+                    players: 2,
+                    boardRadius: 8,
+                    nutrientDensity: 2
     });
   }
 
@@ -35,7 +39,10 @@ class App extends Component {
     return (
       <div className="App">
         Petri
-        <ActionBar gameState={this.state.gameState} />
+        <ActionBar gameState={this.state.gameState}
+                   players={this.state.players}
+                   boardRadius={this.state.boardRadius}
+                   nutrientDensity={this.state.nutrientDensity}/>
       </div>
     );
   }
