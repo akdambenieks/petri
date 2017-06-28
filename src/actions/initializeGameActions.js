@@ -4,3 +4,10 @@ export const selectPlayerNumber = (number) => {
     payload: number
   };
 }
+
+export const selectBoardSize = (size) => {
+  return {
+    type: "BOARD_SIZE_SELECTED",
+    payload: size
+  };
+}
