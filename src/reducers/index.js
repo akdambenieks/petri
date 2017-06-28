@@ -1,8 +1,10 @@
 import {combineReducers} from "redux";
-import GameSetup from "./reducerGameSetup";
+import Game from "./gameReducer";
+import InitializeGame from "./initializeGameReducer";
 
 const combinedReducer = combineReducers({
-  GameSetup: GameSetup
+  Game: Game,
+  InitializeGame: InitializeGame
 });
 
 export default combinedReducer;
