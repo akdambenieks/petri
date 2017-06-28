@@ -7,9 +7,8 @@ class PlayerNumberSelector extends Component {
     const possiblePlayerNumbers = [2,3,4,5,6];
 
     const playerNumberButton = possiblePlayerNumbers.map((number) => {
-      console.log(this.props);
       let namedClass = number === this.props.InitializeGame.players ? "newGameSelection" : "";
-      return <button key={number} className={namedClass}>{number}</button>
+      return <button key={number} className={namedClass} onClick={() => {this.props.selectPlayerNumber(number)}}>{number}</button>
     })
 
     return (
