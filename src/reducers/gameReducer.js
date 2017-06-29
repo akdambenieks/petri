@@ -100,10 +100,16 @@ const Game = (state = {status: "new"}, action) => {
     return board;
   };
 
-  // Function to place starting colonies on the board given board radius and number of players
+  // Function to place starting colonies randomly on the board given board radius and number of players
+  // and randomize the starting turn order
   const addColonies = (payload) => {
     let colonies = [];
     let players = payload.players;
+    let playerArray = [];
+    for (let i = 1; i <= players; i++) {
+      playerArray.push(i);
+    }
+    let randomizedPlayerArray = randomizeArray(playerArray);
     let playerPositionRadius = Math.floor(payload.radius*0.75);
     let playerPositionRing = getHexesInRing(origin, playerPositionRadius);
     let possibleNumberOfPositions = playerPositionRing.length;
@@ -112,10 +118,22 @@ const Game = (state = {status: "new"}, action) => {
       playerPositionRing.push(playerPositionRing.shift());
     }
     for (let n = 0; n < players; n++) {
-      colonies.push(playerPositionRing[Math.floor(n*possibleNumberOfPositions/players)]);
+      let hex = playerPositionRing[Math.floor(n*possibleNumberOfPositions/players)]
+      colonies.push({q: hex.q, r: hex.r, s: hex.s, p: randomizedPlayerArray[n], m: 1});
     }
+    colonies = randomizeArray(colonies);
     return colonies;
   };
+
+  // Function to return a new randomized array given an array
+  const randomizeArray = (array) => {
+    let randomizedArray = [];
+    let tempArray = array.map((item) => {return item});
+    while (tempArray.length > 0) {
+      randomizedArray.push(tempArray.splice([Math.floor(Math.random()*tempArray.length)],1)[0]);
+    }
+    return randomizedArray;
+  }
 
   // Function to add nutrients to the board
   const addNutrients = (payload) => {
@@ -146,6 +164,9 @@ const Game = (state = {status: "new"}, action) => {
     return nutrients;
   }
 
+  // Function to start next turn
+
+
 
   switch(action.type) {
     case "START_GAME_SELECTED":
@@ -158,7 +179,6 @@ const Game = (state = {status: "new"}, action) => {
       // function to add nutrients based on action.payload.nutrientDensity
       let nutrients = addNutrients(action.payload);
       state = Object.assign({}, state, {nutrients: nutrients});
-      // function to randomize player order and making the first colony the active colony
       console.log(state);
       return Object.assign(
                             {},
