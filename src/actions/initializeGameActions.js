@@ -11,3 +11,10 @@ export const selectBoardSize = (size) => {
     payload: size
   };
 }
+
+export const selectNutrientDensity = (density) => {
+  return {
+    type: "NUTRIENT_DENSITY_SELECTED",
+    payload: density
+  };
+}
