@@ -165,7 +165,15 @@ const Game = (state = {status: "new"}, action) => {
   }
 
   // Function to start next turn
-
+  const startNextTurn = () => {
+    let activeColony = state.activeColony;
+    let colonies = state.colonies;
+    if (activeColony !== undefined) {
+      colonies.push(activeColony);
+    }
+    activeColony = colonies.shift();
+    return {colonies: colonies, activeColony: activeColony, turnStage: "selectAction"};
+  }
 
 
   switch(action.type) {
@@ -175,16 +183,15 @@ const Game = (state = {status: "new"}, action) => {
       state = Object.assign({}, state, {board: board});
       // function to add colonies based on action.payload.players
       let colonies = addColonies(action.payload);
-      state = Object.assign({}, state, {colonies: colonies});
+      state = Object.assign({}, state, {colonies: colonies, activeColony: undefined});
       // function to add nutrients based on action.payload.nutrientDensity
       let nutrients = addNutrients(action.payload);
       state = Object.assign({}, state, {nutrients: nutrients});
+      // function to start next turn
+      let firstTurn = startNextTurn();
+      state = Object.assign({}, state, {status: "active"}, firstTurn);
       console.log(state);
-      return Object.assign(
-                            {},
-                            state,
-                            {status: "active", newColonies: []}
-                          );
+      return state;
     default:
       return state;
   }
