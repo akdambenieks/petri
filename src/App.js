@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import ActionBar from './containers/actionBarContainer';
+import Canvas from './containers/canvasContainer';
 import './App.css';
 
 class App extends Component {
@@ -10,7 +11,7 @@ class App extends Component {
     return (
       <div className="App">
         <ActionBar />
-        {/* <GameBoard /> */}
+        <Canvas />
       </div>
     );
   }

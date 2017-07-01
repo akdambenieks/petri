@@ -9,7 +9,8 @@ class StartGameButton extends Component {
                         nutrientDensity: this.props.InitializeGame.nutrientDensity};
 
     return (
-        <button key="start-game" className="start-game"onClick={() => {this.props.startGame(initialGame)}}>Start Game</button>
+        <button key="start-game" className="start-game" onClick={() => {this.props.startGame(initialGame);
+                                                                        this.props.resizingCanvas()}}>Start Game</button>
     )
   }
 

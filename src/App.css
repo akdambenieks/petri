@@ -5,3 +5,20 @@
 .newGameSelection {
   border: solid red 2px;
 }
+
+.hex {
+  stroke: grey;
+  stroke-width: 1;
+  fill: silver;
+}
+
+.nutrient {
+  stroke: none;
+  stroke-width: 0;
+  fill: green;
+}
+
+.active-colony {
+  stroke: cyan;
+  stroke-width: 2;
+}

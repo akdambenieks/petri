@@ -24,7 +24,7 @@ class ActionBar extends Component {
       actionBarContents = (
         <div>
           <h2>Game Started</h2>
-          <p>Player: {this.props.Game.activeColony.p}</p>
+          <p>Player {this.props.Game.activeColony.p}'s Turn</p>
         </div>
       )
     }

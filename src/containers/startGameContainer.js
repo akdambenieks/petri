@@ -1,6 +1,7 @@
 import {connect} from "react-redux";
 import StartGameButton from "../components/startGameButton";
 import {startGame} from "../actions/gameActions";
+import {resizingCanvas} from "../actions/renderingActions";
 
 
 const mapStateToProps = state => {
@@ -12,6 +13,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {startGame: (initialGame) => {
       dispatch(startGame(initialGame))
+    },
+    resizingCanvas: () => {
+      dispatch(resizingCanvas())
     }
   }
 }

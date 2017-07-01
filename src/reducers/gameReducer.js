@@ -1,5 +1,4 @@
 const Game = (state = {status: "new"}, action) => {
-
   const origin = {q: 0, r: 0, s: 0};
   const directionsMatrix = [
                             {q: -1, r: 0, s: 1},
@@ -153,12 +152,12 @@ const Game = (state = {status: "new"}, action) => {
       let wasNutrientAdded = false;
       nutrients.forEach(function(hex) {
         if (nutrientPosition.q === hex.q && nutrientPosition.r === hex.r && nutrientPosition.s === hex.s) {
-          hex.density = hex.density + 1;
+          hex.d = hex.d + 1;
           wasNutrientAdded = true;
         }
       })
       if (wasNutrientAdded === false) {
-        nutrients.push({q: nutrientPosition.q, r: nutrientPosition.r, s: nutrientPosition.s, density: 1});
+        nutrients.push({q: nutrientPosition.q, r: nutrientPosition.r, s: nutrientPosition.s, d: 1});
       }
     }
     return nutrients;
