@@ -13,13 +13,13 @@ class BoardHex extends Component {
     // }
 
     let coords = this.props.coords;
-    let key = coords.q + ',' + coords.r + "," + coords.s;
+    let key = 'h' + coords.q + 'h' + coords.r + "h" + coords.s;
     let canvasCenter = this.props.rendering.canvasCenter;
     let hexSideLength = this.props.rendering.hexSideLength;
     let hexPoints = getHexPointsFromHexCoord(coords, canvasCenter, hexSideLength);
     let radius = this.props.rendering.hexSideLength;
     return (
-      <polygon className="hex" key={key} id={key} points={hexPoints} strokeWidth="1" stroke="blue"/>
+      <polygon className="hex" key={key} id={key} points={hexPoints} />
     )
   }
 

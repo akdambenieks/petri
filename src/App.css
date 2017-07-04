@@ -12,6 +12,13 @@
   fill: silver;
 }
 
+.valid-target {
+  fill: orange;
+  stroke: orange;
+  opacity: 0.2;
+  stroke-width: 2;
+}
+
 .nutrient {
   stroke: none;
   stroke-width: 0;
@@ -20,5 +27,14 @@
 
 .active-colony {
   stroke: cyan;
-  stroke-width: 2;
+  /*stroke-width: 0;*/
+  animation-duration: 1s;
+  animation-name: my-turn;
+  animation-iteration-count: infinite;
+}
+
+@keyframes my-turn {
+  0% {stroke-width: 0px}
+  33% {stroke-width: 5px}
+  66% {stroke-width: 0px}
 }

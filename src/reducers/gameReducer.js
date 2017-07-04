@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 const Game = (state = {status: "new"}, action) => {
   const origin = {q: 0, r: 0, s: 0};
   const directionsMatrix = [
@@ -171,7 +173,7 @@ const Game = (state = {status: "new"}, action) => {
       colonies.push(activeColony);
     }
     activeColony = colonies.shift();
-    return {colonies: colonies, activeColony: activeColony, turnStage: "selectAction"};
+    return {colonies: colonies, activeColony: activeColony, turnStage: "selectAction", validTargets: []};
   }
 
 
@@ -189,7 +191,14 @@ const Game = (state = {status: "new"}, action) => {
       // function to start next turn
       let firstTurn = startNextTurn();
       state = Object.assign({}, state, {status: "active"}, firstTurn);
-      console.log(state);
+      return state;
+    case "MOVE_BUTTON_SELECTED":
+      state = Object.assign({}, state, {validTargets: []}, {turnStage: "moveSelected", validTargets: getNeighboringHexes(state.activeColony)});
+      return state;
+    case "VALID_TARGET_SELECTED":
+      console.log(action.payload);
+      let movedColony = Object.assign({}, state.activeColony, action.payload);
+      state = Object.assign({}, state, {activeColony: movedColony, validTargets: []})
       return state;
     default:
       return state;

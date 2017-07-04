@@ -7,7 +7,7 @@ class ActiveColony extends Component {
   render() {
     const colonyColor = ["red", "blue", "yellow", "orange", "purple", "magenta"];
     let colony = this.props.colony;
-    let key = colony.q + ',' + colony.r + "," + colony.s;
+    let key = 'a' + colony.q + 'a' + colony.r + 'a' + colony.s;
     let canvasCenter = this.props.rendering.canvasCenter;
     let hexSideLength = this.props.rendering.hexSideLength;
     let cartCoords = getCartCoordOfCenterFromHexCoord(colony, canvasCenter, hexSideLength);

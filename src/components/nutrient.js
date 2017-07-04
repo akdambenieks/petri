@@ -6,7 +6,7 @@ class Nutrient extends Component {
 
   render() {
     let nutrient = this.props.nutrient;
-    let key = nutrient.q + ',' + nutrient.r + "," + nutrient.s;
+    let key = 'n' + nutrient.q + 'n' + nutrient.r + "n" + nutrient.s;
     let canvasCenter = this.props.rendering.canvasCenter;
     let hexSideLength = this.props.rendering.hexSideLength;
     let cartCoords = getCartCoordOfCenterFromHexCoord(nutrient, canvasCenter, hexSideLength);

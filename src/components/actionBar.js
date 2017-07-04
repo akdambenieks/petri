@@ -3,6 +3,7 @@ import PlayerNumberSelector from "../containers/playerNumberSelectorContainer";
 import BoardSizeSelector from "../containers/boardSizeSelectorContainer";
 import NutrientDensitySelector from "../containers/nutrientDensitySelectorContainer";
 import StartGame from "../containers/startGameContainer";
+import MoveButton from "../containers/moveButtonContainer";
 
 class ActionBar extends Component {
 
@@ -21,10 +22,12 @@ class ActionBar extends Component {
           </div>
         )
     } else if (this.props.Game.status === "active") {
+
       actionBarContents = (
         <div>
           <h2>Game Started</h2>
           <p>Player {this.props.Game.activeColony.p}'s Turn</p>
+          <MoveButton />
         </div>
       )
     }
