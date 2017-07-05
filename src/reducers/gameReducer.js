@@ -169,12 +169,16 @@ const Game = (state = {status: "new"}, action) => {
   const startNextTurn = () => {
     let activeColony = state.activeColony;
     let colonies = state.colonies;
+    let newColonies = state.newColonies;
     if (activeColony !== undefined) {
       colonies.push(activeColony);
     }
+    if (newColonies !== undefined) {
+      colonies = colonies.concat(newColonies);
+    }
     activeColony = colonies.shift();
 
-    state = Object.assign({}, state, {colonies: colonies, activeColony: activeColony, turnStage: "selectAction", validTargets: []}, )
+    state = Object.assign({}, state, {colonies: colonies, activeColony: activeColony, newColonies: undefined, turnStage: "selectAction", validTargets: []}, )
 
     consumeNutrients();
   }
@@ -190,9 +194,6 @@ const Game = (state = {status: "new"}, action) => {
     let nutrientDensity = 0;
     if (consumable !== undefined) {
       nutrientDensity = consumable.d;
-      console.log("Pre consumption nutrient and colony:")
-      console.log(nutrientDensity);
-      console.log(colonySize);
       if (colonySize >= nutrientDensity) {
         colonySize = colonySize + nutrientDensity;
         nutrientDensity = 0;
@@ -200,9 +201,6 @@ const Game = (state = {status: "new"}, action) => {
         nutrientDensity = nutrientDensity - colonySize;
         colonySize = colonySize * 2;
       }
-      console.log("Post consumption nutrient and colony:")
-      console.log(nutrientDensity);
-      console.log(colonySize);
     }
     let consumedIndex = nutrients.findIndex((nutrient) => {
       return nutrient.q === activeColony.q && nutrient.r === activeColony.r && nutrient.s === activeColony.s;
@@ -224,6 +222,25 @@ const Game = (state = {status: "new"}, action) => {
     startNextTurn();
   }
 
+  // Function to divide colony
+  const divideColony = (childColonyTargetHex) => {
+    let parentSize = Math.ceil(state.activeColony.m/2);
+    let childSize = Math.floor(state.activeColony.m/2);
+    let player = state.activeColony.p;
+    let parentColony = Object.assign({}, state.activeColony, {m: parentSize});
+    let childColony = Object.assign({}, childColonyTargetHex, {p: player, m: childSize});
+    return {parentColony: parentColony, childColony: childColony};
+  }
+
+  // Function to bud off a tiny colony
+  const budColony = (budColonyTargetHex) => {
+    let parentSize = state.activeColony.m - 1;
+    let player = state.activeColony.p;
+    let parentColony = Object.assign({}, state.activeColony, {m: parentSize});
+    let budColony = Object.assign({}, budColonyTargetHex, {p: player, m: 1});
+    return {parentColony: parentColony, budColony: budColony};
+  }
+
 
   switch(action.type) {
     case "START_GAME_SELECTED":
@@ -242,7 +259,19 @@ const Game = (state = {status: "new"}, action) => {
       startNextTurn();
       return state;
     case "MOVE_BUTTON_SELECTED":
-      state = Object.assign({}, state, {validTargets: []}, {turnStage: "moveSelected", validTargets: getNeighboringHexes(state.activeColony)});
+      let validMoves = getNeighboringHexes(state.activeColony);
+      state = Object.assign({}, state, {validTargets: []}, {turnStage: "moveSelected", validTargets: validMoves});
+      return state;
+    case "SKIP_TURN_SELECTED":
+      endTurn();
+      return state;
+    case "DIVIDE_BUTTON_SELECTED":
+      let validDivisionTargets = getNeighboringHexes(state.activeColony);
+      state = Object.assign({}, state, {validTargets: []}, {turnStage: "divideSelected", validTargets: validDivisionTargets});
+      return state;
+    case "BUD_BUTTON_SELECTED":
+      let validBudTargets = getNeighboringHexes(state.activeColony);
+      state = Object.assign({}, state, {validTargets: []}, {turnStage: "budSelected", validTargets: validBudTargets});
       return state;
     case "VALID_TARGET_SELECTED":
       console.log(action.payload);
@@ -251,7 +280,18 @@ const Game = (state = {status: "new"}, action) => {
           let movedColony = Object.assign({}, state.activeColony, action.payload);
           state = Object.assign({}, state, {activeColony: movedColony, validTargets: []});
           endTurn();
-      }
+          break;
+        case "divideSelected":
+          let dividedColonies = divideColony(action.payload);
+          state = Object.assign({}, state, {activeColony: dividedColonies.parentColony, newColonies: dividedColonies.childColony, validTargets: []});
+          endTurn();
+          break;
+        case "budSelected":
+          let buddedColonies = budColony(action.payload);
+          state = Object.assign({}, state, {activeColony: buddedColonies.parentColony, newColonies: buddedColonies.budColony, validTargets: []});
+          endTurn();
+          break;
+        }
       return state;
     default:
       return state;
