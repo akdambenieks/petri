@@ -173,7 +173,55 @@ const Game = (state = {status: "new"}, action) => {
       colonies.push(activeColony);
     }
     activeColony = colonies.shift();
-    return {colonies: colonies, activeColony: activeColony, turnStage: "selectAction", validTargets: []};
+
+    state = Object.assign({}, state, {colonies: colonies, activeColony: activeColony, turnStage: "selectAction", validTargets: []}, )
+
+    consumeNutrients();
+  }
+
+  // Function to consume nutrients if available and grow the colony
+  const consumeNutrients = () => {
+    let nutrients = state.nutrients;
+    let activeColony = state.activeColony;
+    let colonySize = activeColony.m;
+    let consumable = nutrients.find((nutrient) => {
+      return nutrient.q === activeColony.q && nutrient.r === activeColony.r && nutrient.s === activeColony.s;
+    })
+    let nutrientDensity = 0;
+    if (consumable !== undefined) {
+      nutrientDensity = consumable.d;
+      console.log("Pre consumption nutrient and colony:")
+      console.log(nutrientDensity);
+      console.log(colonySize);
+      if (colonySize >= nutrientDensity) {
+        colonySize = colonySize + nutrientDensity;
+        nutrientDensity = 0;
+      } else {
+        nutrientDensity = nutrientDensity - colonySize;
+        colonySize = colonySize * 2;
+      }
+      console.log("Post consumption nutrient and colony:")
+      console.log(nutrientDensity);
+      console.log(colonySize);
+    }
+    let consumedIndex = nutrients.findIndex((nutrient) => {
+      return nutrient.q === activeColony.q && nutrient.r === activeColony.r && nutrient.s === activeColony.s;
+    })
+    if (consumedIndex !== -1) {
+      if (nutrientDensity > 0) {
+        nutrients.splice([consumedIndex], 1, Object.assign({}, consumable, {d: nutrientDensity}));
+      } else {
+        nutrients.splice(consumedIndex, 1);
+      }
+    }
+
+    state = Object.assign({}, state, {nutrients: nutrients, activeColony: Object.assign({}, activeColony, {m: colonySize})});
+  }
+
+  // Function to end turn
+  const endTurn = () => {
+    console.log("Ending Turn");
+    startNextTurn();
   }
 
 
@@ -189,16 +237,21 @@ const Game = (state = {status: "new"}, action) => {
       let nutrients = addNutrients(action.payload);
       state = Object.assign({}, state, {nutrients: nutrients});
       // function to start next turn
-      let firstTurn = startNextTurn();
-      state = Object.assign({}, state, {status: "active"}, firstTurn);
+      // let firstTurn = startNextTurn();
+      state = Object.assign({}, state, {status: "active"});
+      startNextTurn();
       return state;
     case "MOVE_BUTTON_SELECTED":
       state = Object.assign({}, state, {validTargets: []}, {turnStage: "moveSelected", validTargets: getNeighboringHexes(state.activeColony)});
       return state;
     case "VALID_TARGET_SELECTED":
       console.log(action.payload);
-      let movedColony = Object.assign({}, state.activeColony, action.payload);
-      state = Object.assign({}, state, {activeColony: movedColony, validTargets: []})
+      switch (state.turnStage) {
+        case "moveSelected":
+          let movedColony = Object.assign({}, state.activeColony, action.payload);
+          state = Object.assign({}, state, {activeColony: movedColony, validTargets: []});
+          endTurn();
+      }
       return state;
     default:
       return state;

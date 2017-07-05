@@ -17,7 +17,6 @@ class BoardHex extends Component {
     let canvasCenter = this.props.rendering.canvasCenter;
     let hexSideLength = this.props.rendering.hexSideLength;
     let hexPoints = getHexPointsFromHexCoord(coords, canvasCenter, hexSideLength);
-    let radius = this.props.rendering.hexSideLength;
     return (
       <polygon className="hex" key={key} id={key} points={hexPoints} />
     )

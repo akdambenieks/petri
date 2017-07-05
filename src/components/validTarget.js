@@ -11,7 +11,6 @@ class ValidTarget extends Component {
     let canvasCenter = this.props.rendering.canvasCenter;
     let hexSideLength = this.props.rendering.hexSideLength;
     let hexPoints = getHexPointsFromHexCoord(target, canvasCenter, hexSideLength);
-    let radius = this.props.rendering.hexSideLength;
     return (
       <polygon className="valid-target" key={key} id={key} points={hexPoints} onClick={() => this.props.validTargetSelected(target)}/>
     )
