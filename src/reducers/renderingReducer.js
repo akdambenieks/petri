@@ -13,11 +13,13 @@ const Rendering = (state = {
     const canvasSideLength = $("#canvas").width() - 40;
     return Math.floor(canvasSideLength/((2*radius - 1)*Math.sqrt(3)));
   }
-  
+
   switch(action.type) {
     case "RESIZING_CANVAS":
-      state = Object.assign({}, state, {canvasCenter: getCanvasCenter(), hexSideLength: getHexSideLength()})
-      return state;
+      return Object.assign( {},
+                            state,
+                            {canvasCenter: getCanvasCenter()},
+                            {hexSideLength: getHexSideLength()});
     default:
       return state;
   }
