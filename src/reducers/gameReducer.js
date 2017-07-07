@@ -244,6 +244,7 @@ const Game = (state = {status: "new"}, action) => {
 
   switch(action.type) {
     case "START_GAME_SELECTED":
+      console.log(action.payload);
       // generating possible board squares based on action.payload.radius
       const board = generateBoard(action.payload);
       const colonies = addColonies(action.payload, board);
